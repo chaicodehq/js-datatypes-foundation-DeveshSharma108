@@ -69,7 +69,6 @@ export function roundFare(amount, decimalPlaces) {
   ) {
     return "";
   }
-  console.log("bahar");
   return amount.toFixed(decimalPlaces);
 }
 
