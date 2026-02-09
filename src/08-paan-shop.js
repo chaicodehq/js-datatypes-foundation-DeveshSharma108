@@ -46,17 +46,61 @@
  *   updatePrices({meetha:30, saada:20}, 10)              // => {meetha:40, saada:30}
  */
 export function createPaanOrder(basePaan, customizations) {
-  // Your code here
+  if (basePaan === null) {
+    return {};
+  }
+  if (Object.prototype.toString.call(basePaan) !== "[object Object]") {
+    return {};
+  }
+  if (Object.prototype.toString.call(customizations) !== "[object Object]") {
+    return { ...basePaan };
+  }
+  const customizedPaan = Object.assign({}, basePaan, customizations);
+  return customizedPaan;
 }
 
 export function freezeMenu(menu) {
-  // Your code here
+  if (menu === null) {
+    return {};
+  }
+  if (Object.prototype.toString.call(menu) !== "[object Object]") {
+    return {};
+  }
+
+  Object.freeze(menu);
+  return menu;
 }
 
 export function updatePrices(menu, increase) {
-  // Your code here
+  if (menu === null) {
+    return {};
+  }
+  if (Object.prototype.toString.call(menu) !== "[object Object]") {
+    return {};
+  }
+  if (typeof increase !== "number") {
+    return {};
+  }
+
+  let entries = Object.entries(menu);
+  entries = entries.map((entry) => [entry[0], entry[1] + increase]);
+  const updatedMenu = Object.fromEntries(entries);
+  return updatedMenu;
 }
 
 export function mergeDailySpecials(regularMenu, specialsMenu) {
-  // Your code here
+  if (regularMenu === null) {
+    regularMenu = {};
+  }
+  if (Object.prototype.toString.call(regularMenu) !== "[object Object]") {
+    regularMenu = {};
+  }
+  if (specialsMenu === null) {
+    specialsMenu = {};
+  }
+  if (Object.prototype.toString.call(specialsMenu) !== "[object Object]") {
+    specialsMenu = {};
+  }
+
+  return { ...regularMenu, ...specialsMenu };
 }
