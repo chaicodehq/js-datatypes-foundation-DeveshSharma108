@@ -53,21 +53,71 @@
  *   removeRationCard(registry, "RC001")    // => true
  */
 export function getFamilyNames(registry) {
-  // Your code here
+  // in javascript array,null etc are objects so we can't simply do type of check
+
+  if (registry === null) {
+    return [];
+  }
+  if (Object.prototype.toString.call(registry) !== "[object Object]") {
+    return [];
+  }
+  const IDs = Object.keys(registry);
+  return IDs;
 }
 
 export function getAllFamilies(registry) {
-  // Your code here
+  if (registry === null) {
+    return [];
+  }
+  if (Object.prototype.toString.call(registry) !== "[object Object]") {
+    return [];
+  }
+  const families = Object.values(registry);
+  return families;
 }
 
 export function getRationCardEntries(registry) {
-  // Your code here
+  if (registry === null) {
+    return [];
+  }
+  if (Object.prototype.toString.call(registry) !== "[object Object]") {
+    return [];
+  }
+  const entries = Object.entries(registry);
+  return entries;
 }
 
 export function hasRationCard(registry, cardId) {
-  // Your code here
+  if (registry === null) {
+    return false;
+  }
+  if (Object.prototype.toString.call(registry) !== "[object Object]") {
+    return false;
+  }
+  if (typeof cardId !== "string") {
+    return false;
+  }
+  let exists = registry.hasOwnProperty(cardId);
+  return exists;
 }
 
 export function removeRationCard(registry, cardId) {
-  // Your code here
+  if (registry === null) {
+    return false;
+  }
+  if (Object.prototype.toString.call(registry) !== "[object Object]") {
+    return false;
+  }
+  if (typeof cardId !== "string") {
+    return false;
+  }
+
+  let exists = registry.hasOwnProperty(cardId);
+
+  if (exists) {
+    delete registry[cardId];
+    return true;
+  } else {
+    return false;
+  }
 }
