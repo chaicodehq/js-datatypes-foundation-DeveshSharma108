@@ -53,17 +53,97 @@
  *   // => "RAJASTHANI THALI (Veg) - Items: dal - Rs.250.00"
  */
 export function createThaliDescription(thali) {
-  // Your code here
+  if (Object.prototype.toString.call(thali) !== "[object Object]") {
+    return "";
+  }
+  const reqProperties = ["name", "items", "price", "isVeg"];
+  const recievedProperties = Object.keys(thali);
+
+  if (recievedProperties.length !== reqProperties.length) {
+    return "";
+  }
+
+  let missing = false;
+  reqProperties.forEach((property) => {
+    if (!recievedProperties.includes(property)) {
+      missing = true;
+    }
+  });
+
+  if (missing) {
+    return "";
+  }
+
+  let name = thali.name.toUpperCase();
+  let type = thali.isVeg ? "Veg" : "Non-Veg";
+  let items = thali.items.join(", ");
+  let price = thali.price.toFixed(2);
+
+  return `${name} (${type}) - Items: ${items} - Rs.${price}`;
 }
 
 export function getThaliStats(thalis) {
-  // Your code here
+  if (!Array.isArray(thalis) || thalis.length === 0) {
+    return null;
+  }
+
+  const totalThalis = thalis.length;
+  const vegThalis = thalis.filter((thali) => thali.isVeg);
+  const nonVegThalis = thalis.filter((thali) => !thali.isVeg);
+  const prices = thalis.map((thali) => Number(thali.price));
+  const avgPrice = prices.reduce((avg, price, idx) => {
+    return (avg * idx + price) / (idx + 1);
+  });
+  const cheapestThali = Math.min(...prices);
+
+  const costliestThali = Math.max(...prices);
+  const thaliNames = thalis.map((thali) => thali.name);
+
+  return {
+    totalThalis,
+    vegCount: vegThalis.length,
+    nonVegCount: nonVegThalis.length,
+    avgPrice: avgPrice.toFixed(2),
+    cheapest: cheapestThali,
+    costliest: costliestThali,
+    names: thaliNames,
+  };
 }
 
 export function searchThaliMenu(thalis, query) {
-  // Your code here
+  if (!Array.isArray(thalis) || typeof query !== "string") {
+    return [];
+  }
+
+  query = query.toLowerCase();
+
+  function search(thali) {
+    if (thali.name.toLowerCase().includes(query)) {
+      return true;
+    }
+    const items = thali.items.filter((item) => item.includes(query));
+    if (items.length) {
+      return true;
+    }
+    return false;
+  }
+
+  return thalis.filter((thali) => search(thali));
 }
 
 export function generateThaliReceipt(customerName, thalis) {
-  // Your code here
+  if (
+    !Array.isArray(thalis) ||
+    thalis.length === 0 ||
+    typeof customerName !== "string"
+  ) {
+    return "";
+  }
+
+  let orderItems = thalis.map((thali) => `- ${thali.name} x Rs.${thali.price}`);
+  const total = thalis.reduce((currTotal, thali) => currTotal + thali.price, 0);
+
+  return `THALI RECEIPT\n---\nCustomer: ${customerName.toUpperCase()}\n${orderItems.join(
+    "\n"
+  )}\n---\nTotal: Rs.${total}\nItems: ${thalis.length}`;
 }
